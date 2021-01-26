@@ -18,7 +18,6 @@ export class AuthService {
       user: {
         userName: `${user.firstname} ${user.lastname}`,
         username: user.username,
-        roles: user.roles,
       },
       sub: user.id,
     };
@@ -88,8 +87,4 @@ export class AuthService {
 
     return this.toResponseObject({ ...user, token });
   }
-
-  // async me(token: string): Promise<UserResponseDTO> {
-  //   return this.toResponseObject({});
-  // }
 }

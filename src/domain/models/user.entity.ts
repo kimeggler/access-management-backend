@@ -1,6 +1,6 @@
-import { DeepPartial, Entity, Column, ManyToMany } from 'typeorm';
+import { DeepPartial, Entity, Column, ManyToMany, OneToMany } from 'typeorm';
+import { Badge } from './badge.entity';
 import { BaseEntity } from './base.entity';
-import { Role } from './role.entity';
 
 @Entity('user')
 export class User extends BaseEntity {
@@ -20,6 +20,6 @@ export class User extends BaseEntity {
   @Column({ name: 'password' })
   public password: string;
 
-  @ManyToMany((type) => Role, (role) => role.users)
-  public roles: Role[];
+  @OneToMany(() => Badge, (badge) => badge.user)
+  badges: Badge[];
 }
