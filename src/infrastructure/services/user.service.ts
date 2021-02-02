@@ -16,8 +16,4 @@ export class UserService {
       where: { username },
     });
   }
-
-  public async createUser(user: RegisterDTO): Promise<User> {
-    return this.userRepository.save(user);
-  }
 }

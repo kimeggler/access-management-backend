@@ -1,13 +1,5 @@
-import {
-  DeepPartial,
-  Entity,
-  Column,
-  ManyToMany,
-  ManyToOne,
-  OneToMany,
-} from 'typeorm';
-import { BaseEntity } from './base.entity';
-import { User } from './user.entity';
+import {Column, DeepPartial, Entity,} from 'typeorm';
+import {BaseEntity} from './base.entity';
 
 @Entity('badge')
 export class Badge extends BaseEntity {
@@ -16,11 +8,11 @@ export class Badge extends BaseEntity {
   }
 
   @Column({ name: 'identifier' })
-  public firstname: string;
+  public identifier: string;
 
-  @Column({ name: 'secret' })
-  public lastname: string;
+  @Column({ name: 'first_name' })
+  public firstName: string;
 
-  @ManyToOne(() => User, (user) => user.badges)
-  public user: User;
+  @Column({ name: 'last_name' })
+  public lastName: string;
 }

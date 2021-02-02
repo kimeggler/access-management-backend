@@ -8,12 +8,14 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/domain/models/user.entity';
 import { JwtStrategy } from '../strategies/jwt.strategy';
+import { Badge } from 'src/domain/models/badge.entity';
+import { AccessService } from './access.service';
 @Module({
   imports: [
     ConfigModule,
     HttpModule,
     DatabaseModule,
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, Badge]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -23,7 +25,7 @@ import { JwtStrategy } from '../strategies/jwt.strategy';
       }),
     }),
   ],
-  providers: [AuthService, UserService, JwtStrategy],
-  exports: [AuthService],
+  providers: [AuthService, UserService, JwtStrategy, AccessService],
+  exports: [AuthService, AccessService],
 })
 export class ServiceModule {}

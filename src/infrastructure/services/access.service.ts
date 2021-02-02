@@ -1,27 +1,21 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { RegisterDTO } from '../../domain/dto/register.dto';
-import { User } from '../../domain/models/user.entity';
-import { Repository } from 'typeorm';
-import { AuthenticationResponseDTO } from 'src/domain/dto/authenticationResponse.dto';
-import { AuthenticationDTO } from 'src/domain/dto/authentication.dto';
+import {Injectable} from '@nestjs/common';
+import {JwtService} from '@nestjs/jwt';
+import {User} from '../../domain/models/user.entity';
+import {UserService} from './user.service';
+import {RaspberryAccessService} from '../../RaspberryPiApi/services/raspberryAccess.service';
+import {InjectRepository} from '@nestjs/typeorm';
+import {Repository} from 'typeorm';
 
 @Injectable()
 export class AccessService {
-  constructor(
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
-  ) {}
+    constructor(
+        private readonly userService: UserService,
+        private readonly jwtService: JwtService,
+        @InjectRepository(User)
+        private userRepository: Repository<User>,
+    ) {}
 
-  public async authenticate(
-    payload: AuthenticationDTO,
-  ): Promise<AuthenticationResponseDTO> {
-    const badge = this.userRepository.findOne({});
-
-    return null;
-  }
-
-  public async createUser(user: RegisterDTO): Promise<User> {
-    return this.userRepository.save(user);
-  }
+    async openDoor() {
+        RaspberryAccessService.openDoor();
+    }
 }
