@@ -49,22 +49,4 @@ export class AuthService {
     });
   }
 
-  async openDoor() {
-    RaspberryAccessService.openDoor();
-  }
-
-  async register(
-      payload: RegisterDTO
-  ) {
-    let newBadge = new Badge();
-    newBadge.firstName = payload.firstName;
-    newBadge.lastName = payload.lastName;
-    newBadge.identifier = 'abc';
-
-    this.badgeRepository.save(newBadge);
-  }
-
-  async checkRaspberryStatus(): Promise<RaspberryStateDto> {
-    return RaspberryAccessService.getState();
-  }
 }
