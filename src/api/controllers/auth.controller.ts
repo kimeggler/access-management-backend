@@ -1,35 +1,29 @@
-import {Body, Controller, Inject, Post, UseGuards,} from '@nestjs/common';
-import {AuthService} from '../../infrastructure/services/auth.service';
-import {AuthenticationDTO} from 'src/domain/dto/authentication.dto';
-import {AuthenticationResponseDTO} from 'src/domain/dto/authenticationResponse.dto';
-import {RegisterDTO} from '../../domain/dto/register.dto';
+import { Body, Controller, Inject, Post, Get, UseGuards } from '@nestjs/common';
+import { AuthService } from '../../infrastructure/services/auth.service';
+import { RegisterDTO } from '../../domain/dto/register.dto';
 import { JwtAuthGuard } from 'src/infrastructure/guards/jwt-auth.guard';
-import { RaspberryStateDto } from 'src/domain/dto/raspberryState.dto';
+import { LoginDTO } from 'src/domain/dto/login.dto';
+import { LoginResponseDTO } from 'src/domain/dto/userResponse.dto';
 
 @Controller('auth')
 export class AuthController {
   @Inject()
   private readonly authService: AuthService;
 
-  @UseGuards(JwtAuthGuard)
-  @Post('/authenticate')
-  authenticate(
-      @Body() payload: AuthenticationDTO,
-  ): Promise<AuthenticationResponseDTO> {
-    return this.authService.authenticate(payload);
+  @Post('/login')
+  login(@Body() payload: LoginDTO): Promise<LoginResponseDTO> {
+    return this.authService.login(payload);
   }
 
   @UseGuards(JwtAuthGuard)
   @Post('/register')
-  register(
-      @Body() payload: RegisterDTO,
-  ): void {
-    this.authService.register(payload);
+  register(@Body() payload: RegisterDTO): Promise<LoginResponseDTO> {
+    return this.authService.register(payload);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('/check')
-  checkRaspberryStatus(): Promise<RaspberryStateDto> {
-    return this.authService.checkRaspberryStatus();
+  @Get('me')
+  getProfile(@Request() req) {
+    return req.user;
   }
 }
