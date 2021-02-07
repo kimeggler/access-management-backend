@@ -1,5 +1,5 @@
-import {Column, DeepPartial, Entity,} from 'typeorm';
-import {BaseEntity} from './base.entity';
+import { Column, DeepPartial, Entity } from 'typeorm';
+import { BaseEntity } from './base.entity';
 
 @Entity('badge')
 export class Badge extends BaseEntity {

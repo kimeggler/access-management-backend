@@ -1,6 +1,5 @@
-import { RaspberryStateEnum } from "../enums/raspberryState.enum";
+import { RaspberryStateEnum } from '../enums/raspberrystate.enum';
 
-
-export interface RaspberryStateDto {
-    state: RaspberryStateEnum
+export interface RaspberryStateDTO {
+  state: RaspberryStateEnum;
 }

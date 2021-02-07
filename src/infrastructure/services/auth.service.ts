@@ -1,17 +1,24 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDTO } from '../../domain/dto/login.dto';
-import { LoginResponseDTO } from '../../domain/dto/loginResponse.dto';
+import { LoginResponseDTO } from '../../domain/dto/responses/loginResponse.dto';
 import { RegisterDTO } from '../../domain/dto/register.dto';
 import { User } from '../../domain/models/user.entity';
 import { UserService } from './user.service';
 import * as bcrypt from 'bcryptjs';
+import { LogService } from './log.service';
+import { LogTypeENUM } from 'src/domain/enums/logtype';
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
+    private readonly logService: LogService,
   ) {}
+
+  async log(data: string) {
+    this.logService.createEntry({ log: data, type: LogTypeENUM.USER });
+  }
 
   async generateToken(user: User): Promise<string> {
     const payload = {
@@ -44,6 +51,9 @@ export class AuthService {
     const user = await this.userService.findUserByUsername(payload.username);
 
     if (!user) {
+      this.log(
+        `Invalid login attempt using this username: ${payload.username}`,
+      );
       throw new HttpException(
         'Invalide username or password',
         HttpStatus.BAD_REQUEST,
@@ -56,6 +66,9 @@ export class AuthService {
     );
 
     if (!correctPassword) {
+      this.log(
+        `Attempted login with wrong password on user: ${payload.username}`,
+      );
       throw new HttpException(
         'Invalide username or password',
         HttpStatus.BAD_REQUEST,
@@ -63,6 +76,8 @@ export class AuthService {
     }
 
     const token = await this.generateToken(user);
+
+    this.log(`Valid Login with user: ${payload.username}`);
 
     return this.toResponseObject({ ...user, token });
   }
@@ -84,6 +99,8 @@ export class AuthService {
       password: hashedPassword,
     });
     const token = await this.generateToken(user);
+
+    this.log(`Created new user: ${payload.username}`);
 
     return this.toResponseObject({ ...user, token });
   }

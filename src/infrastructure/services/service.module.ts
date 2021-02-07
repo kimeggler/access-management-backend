@@ -10,12 +10,14 @@ import { User } from 'src/domain/models/user.entity';
 import { JwtStrategy } from '../strategies/jwt.strategy';
 import { Badge } from 'src/domain/models/badge.entity';
 import { AccessService } from './access.service';
+import { LogService } from './log.service';
+import { Log } from 'src/domain/models/log.entity';
 @Module({
   imports: [
     ConfigModule,
     HttpModule,
     DatabaseModule,
-    TypeOrmModule.forFeature([User, Badge]),
+    TypeOrmModule.forFeature([User, Badge, Log]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -25,7 +27,7 @@ import { AccessService } from './access.service';
       }),
     }),
   ],
-  providers: [AuthService, UserService, JwtStrategy, AccessService],
-  exports: [AuthService, AccessService],
+  providers: [AuthService, UserService, JwtStrategy, AccessService, LogService],
+  exports: [AuthService, UserService, AccessService, LogService],
 })
 export class ServiceModule {}

@@ -1,4 +1,4 @@
 export enum RaspberryStateEnum {
-    WRITE = 'write',
-    READ = 'read',
+  HEALTHY = 'healthy',
+  ERROR = 'error',
 }

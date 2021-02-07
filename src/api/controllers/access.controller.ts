@@ -1,7 +1,8 @@
 import { Controller, Inject, Post, Body, UseGuards } from '@nestjs/common';
 import { AuthenticationDTO } from 'src/domain/dto/authentication.dto';
-import { AuthenticationResponseDTO } from 'src/domain/dto/authenticationResponse.dto';
-import { RaspberryStateDto } from 'src/domain/dto/raspberryState.dto';
+import { AuthenticationResponseDTO } from 'src/domain/dto/responses/authenticationResponse.dto';
+import { RaspberryStateDTO } from 'src/domain/dto/raspberryState.dto';
+import { ReaderModeDTO } from 'src/domain/dto/readerHealth.dto';
 import { JwtAuthGuard } from 'src/infrastructure/guards/jwt-auth.guard';
 import { AccessService } from 'src/infrastructure/services/access.service';
 
@@ -19,14 +20,20 @@ export class AccessController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('/openDoor')
+  @Post('/open')
   openDoor(): void {
     this.accessService.openDoor();
   }
 
   @UseGuards(JwtAuthGuard)
   @Post('/check')
-  checkRaspberryStatus(): Promise<RaspberryStateDto> {
-    return this.accessService.checkRaspberryStatus();
+  checkReaderStatus(): Promise<ReaderModeDTO> {
+    return this.accessService.checkReaderStatus();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/health')
+  checkRaspberryHealth(): Promise<RaspberryStateDTO> {
+    return this.accessService.checkRaspberryHealth();
   }
 }

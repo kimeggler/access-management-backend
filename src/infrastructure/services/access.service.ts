@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '../../domain/models/user.entity';
-import { RaspberryAccessService } from '../../RaspberryPiApi/services/raspberryAccess.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AuthenticationDTO } from 'src/domain/dto/authentication.dto';
 import { RegisterBadgeDTO } from 'src/domain/dto/registerBadge.dto';
-import { AuthenticationResponseDTO } from 'src/domain/dto/authenticationResponse.dto';
+import { AuthenticationResponseDTO } from 'src/domain/dto/responses/authenticationResponse.dto';
 import { Badge } from 'src/domain/models/badge.entity';
-import { RaspberryStateDto } from 'src/domain/dto/raspberryState.dto';
+import { RaspberryStateEnum } from 'src/domain/enums/raspberrystate.enum';
+import { RaspberryStateDTO } from 'src/domain/dto/raspberryState.dto';
+import { ReaderModeDTO } from 'src/domain/dto/readerHealth.dto';
 
 @Injectable()
 export class AccessService {
@@ -22,7 +23,7 @@ export class AccessService {
   }
 
   async openDoor() {
-    RaspberryAccessService.openDoor();
+    //opendoor
   }
 
   public async authenticate(
@@ -41,7 +42,7 @@ export class AccessService {
       });
     }
 
-    RaspberryAccessService.openDoor();
+    this.openDoor();
 
     return this.toResponseObject({
       authenticated: true,
@@ -50,7 +51,7 @@ export class AccessService {
   }
 
   async register(payload: RegisterBadgeDTO) {
-    let newBadge = new Badge();
+    const newBadge = new Badge();
     newBadge.firstName = payload.firstname;
     newBadge.lastName = payload.lastname;
     newBadge.identifier = 'abc';
@@ -58,7 +59,15 @@ export class AccessService {
     this.badgeRepository.save(newBadge);
   }
 
-  async checkRaspberryStatus(): Promise<RaspberryStateDto> {
-    return RaspberryAccessService.getState();
+  async checkRaspberryHealth(): Promise<RaspberryStateDTO> {
+    return new Promise((resolve) => {
+      resolve({
+        state: RaspberryStateEnum.HEALTHY,
+      });
+    });
+  }
+
+  async checkReaderStatus(): Promise<ReaderModeDTO> {
+    return null;
   }
 }
