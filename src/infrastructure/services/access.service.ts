@@ -1,21 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { User } from '../../domain/models/user.entity';
-import { UserService } from './user.service';
 import { RaspberryAccessService } from '../../RaspberryPiApi/services/raspberryAccess.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AuthenticationDTO } from 'src/domain/dto/authentication.dto';
+import { RegisterBadgeDTO } from 'src/domain/dto/registerBadge.dto';
 import { AuthenticationResponseDTO } from 'src/domain/dto/authenticationResponse.dto';
 import { Badge } from 'src/domain/models/badge.entity';
+import { RaspberryStateDto } from 'src/domain/dto/raspberryState.dto';
 
 @Injectable()
 export class AccessService {
   constructor(
-    private readonly userService: UserService,
-    private readonly jwtService: JwtService,
     @InjectRepository(User)
-    private userRepository: Repository<User>,
     private badgeRepository: Repository<Badge>,
   ) {}
 
@@ -52,10 +49,10 @@ export class AccessService {
     });
   }
 
-  async register(payload: RegisterDTO) {
+  async register(payload: RegisterBadgeDTO) {
     let newBadge = new Badge();
-    newBadge.firstName = payload.firstName;
-    newBadge.lastName = payload.lastName;
+    newBadge.firstName = payload.firstname;
+    newBadge.lastName = payload.lastname;
     newBadge.identifier = 'abc';
 
     this.badgeRepository.save(newBadge);

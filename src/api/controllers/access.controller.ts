@@ -1,22 +1,21 @@
 import { Controller, Inject, Post, Body, UseGuards } from '@nestjs/common';
 import { AuthenticationDTO } from 'src/domain/dto/authentication.dto';
 import { AuthenticationResponseDTO } from 'src/domain/dto/authenticationResponse.dto';
+import { RaspberryStateDto } from 'src/domain/dto/raspberryState.dto';
 import { JwtAuthGuard } from 'src/infrastructure/guards/jwt-auth.guard';
 import { AccessService } from 'src/infrastructure/services/access.service';
-import { AuthService } from 'src/infrastructure/services/auth.service';
 
 @Controller('access')
 export class AccessController {
   @Inject()
   private readonly accessService: AccessService;
-  private readonly authService: AuthService;
 
   @UseGuards(JwtAuthGuard)
   @Post('/authenticate')
   authenticate(
     @Body() payload: AuthenticationDTO,
   ): Promise<AuthenticationResponseDTO> {
-    return this.authService.authenticate(payload);
+    return this.accessService.authenticate(payload);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -28,6 +27,6 @@ export class AccessController {
   @UseGuards(JwtAuthGuard)
   @Post('/check')
   checkRaspberryStatus(): Promise<RaspberryStateDto> {
-    return this.authService.checkRaspberryStatus();
+    return this.accessService.checkRaspberryStatus();
   }
 }
