@@ -15,7 +15,7 @@ export class LogController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('/access')
+  @Post('/user')
   getUserLogs(): Promise<LogResponseDTO[]> {
     return this.logService.findAllUserLogs();
   }
